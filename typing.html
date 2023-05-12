@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>早口言葉タイピングゲーム</title>
+</head>
+<body>
+  <div id="container">
+    <h1>早口言葉タイピングゲーム</h1>
+    <p id="sentence"></p>
+    <input type="text" id="typing-area">
+    <div id="result">
+      <p id="score">スコア: 0</p>
+      <p id="result-message"></p>
+      <button id="start-button">スタート</button>
+      <button id="restart-button" style="display: none;">再スタート</button>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+  // ランダムな文章を返す関数
+  function getRandomSentence() {
+      const sentences = [
+        '隣の客はよく柿食う客だ',
+        '炙りカルビ',
+        '坊主が上手にびょうぶに坊主の絵をかいた',
+        '赤巻紙青巻紙黄巻紙',
+        '東京特許許可局',
+        '竹藪焼けた',
+        '生麦生米生卵',
+        '僕ボブ',
+        '野田だな野田だな野田なのだな',
+        'すもももももももものうち'
+      ];    
+      const randomIndex = Math.floor(Math.random() * sentences.length);
+      return sentences[randomIndex];
+  }
+
+  // ゲーム開始
+  function startGame() {
+      // ランダムな早口言葉を表示する
+      let sentence = getRandomSentence();
+      let sentenceElement = document.getElementById('sentence');
+      sentenceElement.textContent = sentence;
+
+      // タイピングエリア
+      const typingArea = document.getElementById('typing-area');
+
+      // 文字列を比較
+      let score = 0;
+      let isGameOver = false;
+      typingArea.addEventListener('input', function() {
+        if (isGameOver) {
+          return;
+        }
+
+        const typedText = typingArea.value;
+        console.log(typedText);
+        if (typedText === sentence) {
+          score++;
+          document.getElementById('score').textContent = `スコア: ${score}`;
+          if (score >= 5) {
+            isGameOver = true;
+            document.getElementById('result-message').textContent = 'ゲームクリア！';
+            document.getElementById('restart-button').style.display = 'block';
+          } else {
+            sentence = getRandomSentence();
+        sentenceElement.textContent = sentence;
+            typingArea.value = '';
+          }
+        }
+      });
+  }
+
+  // ゲームスタート
+  const startButton = document.getElementById('start-button');
+  startButton.addEventListener('click', startGame);
+
+
+
+// 再スタートボタンをクリックしたらゲームが始まる
+const restartButton = document.getElementById('restart-button');
+restartButton.addEventListener('click', function() {
+    document.getElementById('score').textContent = 'スコア: 0';
+    document.getElementById('result-message').textContent = '';
+    restartButton.style.display = 'none';
+    document.getElementById('typing-area').value = '';
+    startGame();
+});
+</script>
